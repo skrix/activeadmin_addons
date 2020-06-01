@@ -26,6 +26,8 @@ var initializer = function() {
       var minimumInputLength = element.data('minimum-input-length');
       var order = element.data('order');
 
+      var displayLabelMethods = Array.isArray(displayName) ? displayName : [displayName];
+
       var selectOptions = {
         minimumInputLength: minimumInputLength,
         allowClear: true,
@@ -57,9 +59,13 @@ var initializer = function() {
 
             return {
               results: jQuery.map(data, function(resource) {
+                var displayLabelText = displayLabelMethods
+                                        .map(function(field) { return resource[field].toString() })
+                                        .join(' ')
+
                 return {
                   id: resource.id,
-                  text: resource[displayName].toString(),
+                  text: displayLabelText,
                 };
               }),
             };

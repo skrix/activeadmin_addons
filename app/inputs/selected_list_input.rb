@@ -1,4 +1,6 @@
 class SelectedListInput < ActiveAdminAddons::InputBase
+  MULTIPLE_FIELDS_DIVIDER = ' '.freeze
+
   def render_custom_input
     concat(label_html)
     concat(render_control_wrapper)
@@ -49,6 +51,9 @@ class SelectedListInput < ActiveAdminAddons::InputBase
   end
 
   def item_label(item)
-    item.send(@options[:display_name] || "name")
+    return item.name unless @options[:display_name].present?
+    return item.send(@options[:display_name]) unless @options[:display_name].kind_of?(Array)
+
+    @options[:display_name].map { |property| item.send(property) }.join(MULTIPLE_FIELDS_DIVIDER)
   end
 end
